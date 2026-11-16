@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="EcoTrack ESG — Corporate Carbon Footprint Command Center. Real-time GHG monitoring, scenario simulation, and audit trails powered by IBM Cloud." />
+  <title>EcoTrack ESG — Carbon Footprint Command Center</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ============================================================
+       TOP NAVIGATION
+  ============================================================ -->
+  <header class="topnav" role="banner">
+    <div class="topnav__brand">
+      <!-- Inline SVG brand mark — zero external asset dependency -->
+      <svg class="topnav__logo" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg"
+           role="img" aria-label="EcoTrack ESG logo">
+        <circle cx="18" cy="18" r="16" stroke="#24a148" stroke-width="1.6" fill="none"/>
+        <path d="M18 5 C11 10, 7.5 14.5, 10 19 C12 23, 16.5 24.5, 18 28 C19.5 24.5, 24 23, 26 19 C28.5 14.5, 25 10, 18 5Z"
+              fill="#24a148" opacity=".85"/>
+        <circle cx="18" cy="18" r="4.5" fill="#0f62fe"/>
+        <path d="M18 13.5 L18 11 M18 25 L18 22.5 M13.5 18 L11 18 M25 18 L22.5 18"
+              stroke="#42be65" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+      <span class="topnav__title">
+        Eco<span class="topnav__title--accent">Track</span>
+        <span class="topnav__title--muted">ESG</span>
+      </span>
+    </div>
+
+    <div class="topnav__right">
+      <div class="badge-live" role="status" aria-live="polite" aria-atomic="true">
+        <span class="badge-live__dot" aria-hidden="true"></span>
+        Live Telemetry: Connected
+      </div>
+      <time class="topnav__clock" id="utcClock" aria-label="Current UTC time">--:--:-- UTC</time>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       FACILITY CONTROL BAR
+  ============================================================ -->
+  <div class="control-bar" role="navigation" aria-label="Facility and reporting controls">
+    <div class="control-bar__left">
+      <label class="control-bar__label" for="facilitySelect">Facility</label>
+      <div class="select-wrap">
+        <select class="facility-select" id="facilitySelect" aria-label="Select active facility">
+          <option value="global">Global Aggregated</option>
+          <option value="frankfurt">Data Center Alpha — Frankfurt</option>
+          <option value="austin">Silicon Fabrication Hub — Austin</option>
+          <option value="singapore">Logistics Terminal — Singapore</option>
+        </select>
+        <svg class="select-caret" viewBox="0 0 12 8" fill="none" aria-hidden="true">
+          <path d="M1 1L6 7L11 1" stroke="#8d8d8d" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+    <div class="control-bar__meta">
+      Reporting Period: <strong id="reportingPeriod">Jan 2025 – Nov 2025</strong>
+      &nbsp;|&nbsp; Refresh: <strong>60 s</strong>
+      &nbsp;|&nbsp; Framework: <strong>GHG Protocol Scope 1–3</strong>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MAIN CONTENT
+  ============================================================ -->
+  <main class="main" id="mainContent" role="main">
+
+    <!-- === SECTION: KPI TELEMETRY GRID === -->
+    <section class="dashboard-section" aria-labelledby="kpiHeading">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title" id="kpiHeading">Executive KPI Telemetry</h2>
+          <p class="section-subtitle">Real-time carbon &amp; energy performance indicators</p>
+        </div>
+      </div>
+
+      <div class="kpi-grid" id="kpiGrid">
+
+        <!-- KPI Card 1: Scope 1 & 2 Emissions -->
+        <article class="kpi-card kpi-card--blue" role="region" aria-label="Scope 1 and 2 Emissions">
+          <div class="kpi-card__label">Scope 1 &amp; 2 Emissions</div>
+          <div class="kpi-card__value">
+            <strong id="kpi-emissions-val">1,248.6</strong> tCO₂e
+          </div>
+          <span class="kpi-badge kpi-badge--down" id="kpi-emissions-badge">↓ 12.4% MoM</span>
+          <div class="kpi-mini-bar-wrap">
+            <div class="bar-mini">
+              <div class="bar-mini__track">
+                <div class="bar-mini__fill bar-mini__fill--blue" id="kpi-s1bar" style="width:62%"></div>
+              </div>
+              <div class="bar-mini__val" id="kpi-s1pct">62%</div>
+            </div>
+            <div class="kpi-card__sublabel">Scope 1 share of total</div>
+          </div>
+        </article>
+
+        <!-- KPI Card 2: Renewable Energy Mix -->
+        <article class="kpi-card kpi-card--green" role="region" aria-label="Renewable Energy Mix">
+          <div class="kpi-card__label">Renewable Energy Mix</div>
+          <div class="kpi-ring-wrap">
+            <svg class="kpi-ring-svg" viewBox="0 0 72 72" role="img" aria-label="Renewable energy radial progress ring">
+              <circle class="ring-bg"   cx="36" cy="36" r="28"/>
+              <circle class="ring-fill" cx="36" cy="36" r="28" id="renewRing"
+                stroke-dasharray="175.9" stroke-dashoffset="38.4"/>
+              <text class="ring-label" x="36" y="38" id="renewRingLabel">78%</text>
+            </svg>
+            <div class="kpi-ring-info">
+              <div class="kpi-card__value kpi-card__value--sm" id="kpi-renew-val">78.2%</div>
+              <span class="kpi-badge kpi-badge--down" id="kpi-renew-badge">↑ 3.1% QoQ</span>
+              <div class="kpi-card__sublabel" id="kpi-renew-src">Solar 44% · Wind 34%</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- KPI Card 3: Grid Power Consumption -->
+        <article class="kpi-card kpi-card--amber" role="region" aria-label="Grid Power Consumption">
+          <div class="kpi-card__label">Grid Power Consumption</div>
+          <div class="kpi-card__value"><strong id="kpi-grid-val">4.82</strong> MWh</div>
+          <div class="kpi-warn-pill" id="kpi-grid-warn" role="alert">
+            <svg class="warn-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M8 1L1 15h14L8 1Z" stroke="#f1c21b" stroke-width="1.5"/>
+              <line x1="8" y1="6.5" x2="8" y2="11" stroke="#f1c21b" stroke-width="1.5"/>
+              <circle cx="8" cy="13" r=".9" fill="#f1c21b"/>
+            </svg>
+            <span id="kpi-grid-warn-text">Peak load: 94% capacity</span>
+          </div>
+          <div class="kpi-card__sublabel kpi-card__sublabel--mt" id="kpi-grid-sub">
+            Demand charge risk: <span class="risk-high">High</span>
+          </div>
+        </article>
+
+        <!-- KPI Card 4: 2030 Net-Zero Progress -->
+        <article class="kpi-card kpi-card--purple" role="region" aria-label="2030 Net-Zero Target Progress">
+          <div class="kpi-card__label">2030 Net-Zero Target</div>
+          <div class="kpi-card__value"><strong id="kpi-nz-val">64</strong>%</div>
+          <div class="kpi-progress-wrap">
+            <div class="kpi-progress-labels">
+              <span>Progress to full decarbonisation</span>
+              <span id="kpi-nz-label">64 / 100</span>
+            </div>
+            <div class="kpi-progress-bar"
+                 role="progressbar"
+                 aria-label="Net-zero progress"
+                 aria-valuemin="0" aria-valuemax="100" aria-valuenow="64"
+                 id="kpi-nz-bar-wrap">
+              <div class="kpi-progress-fill" id="kpi-nz-bar" style="width:64%"></div>
+            </div>
+          </div>
+          <div class="kpi-card__sublabel kpi-card__sublabel--mt" id="kpi-nz-sub">
+            On track · 6 yrs to target · SBTi aligned
+          </div>
+        </article>
+
+      </div><!-- /kpi-grid -->
+    </section>
+
+    <!-- === SECTION: TIME-SERIES CHART + SCOPE BREAKDOWN === -->
+    <section class="dashboard-section" aria-labelledby="chartHeading">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title" id="chartHeading">Carbon Emission Telemetry</h2>
+          <p class="section-subtitle">Real-time GHG discharge monitoring with animated live feed</p>
+        </div>
+      </div>
+
+      <div class="row-2">
+
+        <!-- Main Canvas Chart -->
+        <div class="card chart-card">
+          <div class="card__header">
+            <div>
+              <h3 class="card__title">Hourly tCO₂e Output</h3>
+              <p class="card__sub" id="chartFacilityLabel">Global Aggregated — Live Feed</p>
+            </div>
+            <div class="chart-controls" role="group" aria-label="Chart time range selector">
+              <button class="time-btn active" data-range="24h" aria-pressed="true">24H</button>
+              <button class="time-btn" data-range="7d"  aria-pressed="false">7D</button>
+              <button class="time-btn" data-range="30d" aria-pressed="false">30D</button>
+            </div>
+          </div>
+          <div class="canvas-wrap" id="canvasWrap">
+            <canvas id="emissionsCanvas" role="img" aria-label="Carbon emissions time-series line chart"></canvas>
+            <div id="chartTooltip" class="chart-tooltip" role="tooltip" aria-hidden="true">
+              <div class="tt-label" id="tt-label">—</div>
+              <div class="tt-val"   id="tt-val">—</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scope Breakdown -->
+        <div class="card">
+          <div class="card__header">
+            <div>
+              <h3 class="card__title">Scope Breakdown</h3>
+              <p class="card__sub">GHG Protocol Scope 1–3 split</p>
+            </div>
+          </div>
+
+          <div class="donut-center">
+            <svg class="donut-svg" viewBox="0 0 140 140" role="img" aria-label="Scope breakdown donut chart">
+              <!-- Background ring -->
+              <circle cx="70" cy="70" r="50" fill="none" stroke="#393939" stroke-width="20"/>
+              <!-- Scope 1 arc — blue -->
+              <circle id="donut-s1" cx="70" cy="70" r="50" fill="none"
+                      stroke="#0f62fe" stroke-width="20"
+                      stroke-dasharray="314.16" stroke-dashoffset="0"
+                      transform="rotate(-90 70 70)"/>
+              <!-- Scope 2 arc — green -->
+              <circle id="donut-s2" cx="70" cy="70" r="50" fill="none"
+                      stroke="#24a148" stroke-width="20"
+                      stroke-dasharray="314.16" stroke-dashoffset="0"
+                      transform="rotate(-90 70 70)"/>
+              <!-- Scope 3 arc — purple tick -->
+              <circle id="donut-s3" cx="70" cy="70" r="50" fill="none"
+                      stroke="#8a3ffc" stroke-width="20"
+                      stroke-dasharray="2 314" stroke-dashoffset="0"
+                      transform="rotate(-90 70 70)"/>
+              <text x="70" y="66" class="donut-label-title">Total</text>
+              <text x="70" y="82" class="donut-label-val" id="donut-total">1,248.6</text>
+            </svg>
+          </div>
+
+          <div id="scopeBreakdown" class="scope-list">
+            <div class="scope-row">
+              <span class="scope-swatch scope-swatch--blue"></span>
+              <span class="scope-name">Scope 1 — Direct</span>
+              <span class="scope-pct" id="s1-label">462.5 tCO₂e (37%)</span>
+            </div>
+            <div class="scope-row">
+              <span class="scope-swatch scope-swatch--green"></span>
+              <span class="scope-name">Scope 2 — Indirect</span>
+              <span class="scope-pct" id="s2-label">786.1 tCO₂e (63%)</span>
+            </div>
+            <div class="scope-row">
+              <span class="scope-swatch scope-swatch--purple"></span>
+              <span class="scope-name">Scope 3 — Value Chain</span>
+              <span class="scope-pct" id="s3-label">3,210.0 tCO₂e</span>
+            </div>
+          </div>
+
+          <div class="intensity-block">
+            <div class="intensity-block__label">Intensity Ratio</div>
+            <div class="intensity-block__val" id="intensityVal">0.82 tCO₂e / MWh</div>
+            <div class="intensity-block__delta" id="intensityDelta">↓ 8.2% vs prior year</div>
+          </div>
+        </div>
+
+      </div><!-- /row-2 -->
+    </section>
+
+    <!-- === SECTION: ESG SCENARIO SIMULATOR === -->
+    <section class="dashboard-section" aria-labelledby="simHeading">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title" id="simHeading">ESG Scenario Simulator</h2>
+          <p class="section-subtitle">"What-If" Calculator — drag sliders to model decarbonisation scenarios in real time</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="sim-grid">
+
+          <!-- Sliders Panel -->
+          <div class="sim-sliders">
+
+            <div class="slider-row">
+              <label for="sliderIdle">
+                <span class="slider-name">Server Fleet Idle Power Cap</span>
+                <span class="slider-val" id="sliderIdleVal">45%</span>
+              </label>
+              <input type="range" id="sliderIdle" min="0" max="100" value="45"
+                     aria-label="Server Fleet Idle Power Cap percentage" />
+            </div>
+
+            <div class="slider-row">
+              <label for="sliderHVAC">
+                <span class="slider-name">HVAC Smart Cooling Set-Point</span>
+                <span class="slider-val" id="sliderHVACVal">22°C</span>
+              </label>
+              <input type="range" id="sliderHVAC" min="18" max="26" value="22"
+                     aria-label="HVAC Smart Cooling temperature set-point in Celsius" />
+            </div>
+
+            <div class="slider-row">
+              <label for="sliderSolar">
+                <span class="slider-name">Solar / On-site Renewables Allocation</span>
+                <span class="slider-val" id="sliderSolarVal">60%</span>
+              </label>
+              <input type="range" id="sliderSolar" min="0" max="100" value="60"
+                     aria-label="Solar and on-site renewables allocation percentage" />
+            </div>
+
+            <!-- Parameter summary pills -->
+            <div class="sim-params" aria-label="Current scenario parameters">
+              <div class="sim-param">
+                <div class="sim-param__val sim-param__val--blue" id="paramIdle">45%</div>
+                <div class="sim-param__key">Idle Cap</div>
+              </div>
+              <div class="sim-param">
+                <div class="sim-param__val sim-param__val--amber" id="paramHVAC">22°C</div>
+                <div class="sim-param__key">Set-Point</div>
+              </div>
+              <div class="sim-param">
+                <div class="sim-param__val sim-param__val--green" id="paramSolar">60%</div>
+                <div class="sim-param__key">Renewables</div>
+              </div>
+            </div>
+
+          </div><!-- /sim-sliders -->
+
+          <!-- Results Panel -->
+          <div class="sim-results" aria-live="polite" aria-atomic="false">
+
+            <div class="sim-result-item">
+              <div class="sim-result-item__label">Est. Annual Carbon Reduction</div>
+              <div class="sim-result-item__val sim-result-item__val--green" id="simCarbonSaving">— tCO₂e</div>
+              <div class="sim-result-item__unit">vs. current facility baseline</div>
+            </div>
+
+            <div class="sim-divider"></div>
+
+            <div class="sim-result-item">
+              <div class="sim-result-item__label">Est. Cost Savings (USD)</div>
+              <div class="sim-result-item__val sim-result-item__val--blue" id="simCostSaving">$—</div>
+              <div class="sim-result-item__unit">projected annual reduction</div>
+            </div>
+
+            <div class="sim-divider"></div>
+
+            <div class="sim-result-item">
+              <div class="sim-result-item__label">Projected Renewable Mix</div>
+              <div class="sim-result-item__val sim-result-item__val--teal" id="simRenewMix">—%</div>
+              <div class="sim-result-item__unit" id="simRenewBase">up from current 78.2%</div>
+            </div>
+
+            <div class="sim-insight" id="simInsight" role="note">
+              Adjust the sliders to model your decarbonisation strategy. Results update instantly.
+            </div>
+
+          </div><!-- /sim-results -->
+        </div><!-- /sim-grid -->
+      </div><!-- /card -->
+    </section>
+
+    <!-- === SECTION: ANOMALY FEED & AUDIT LOG === -->
+    <section class="dashboard-section" aria-labelledby="auditHeading">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title" id="auditHeading">Anomaly Feed &amp; Audit Log</h2>
+          <p class="section-subtitle">Energy event trail with priority classification and GHG impact tracking</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card__header audit-controls-header">
+          <div class="audit-controls">
+            <div class="search-input-wrap">
+              <svg class="search-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <circle cx="6.5" cy="6.5" r="4.5" stroke="#8d8d8d" stroke-width="1.4"/>
+                <line x1="10.1" y1="10.1" x2="14.5" y2="14.5" stroke="#8d8d8d" stroke-width="1.6"
+                      stroke-linecap="round"/>
+              </svg>
+              <input type="search" class="search-input" id="auditSearch"
+                     placeholder="Filter by keyword, facility, department…"
+                     aria-label="Search and filter audit log" />
+            </div>
+            <button class="btn btn-primary" id="exportBtn"
+                    aria-label="Export audit log as CSV file">
+              <svg viewBox="0 0 14 14" fill="none" class="btn-icon" aria-hidden="true">
+                <path d="M7 1v8M4 6l3 3 3-3M2 11h10" stroke="currentColor"
+                      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Export Audit Log
+            </button>
+            <button class="btn btn-ghost" id="refreshAuditBtn"
+                    aria-label="Refresh audit log">
+              <svg viewBox="0 0 14 14" fill="none" class="btn-icon" aria-hidden="true">
+                <path d="M12 7A5 5 0 1 1 7 2M11 2h2v2" stroke="currentColor"
+                      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Refresh
+            </button>
+          </div>
+        </div>
+
+        <div class="audit-table-wrap" role="region" aria-label="Audit log data table">
+          <table class="audit-table" id="auditTable">
+            <thead>
+              <tr>
+                <th scope="col">Timestamp (UTC)</th>
+                <th scope="col">Event ID</th>
+                <th scope="col">Facility</th>
+                <th scope="col">Department</th>
+                <th scope="col">Description</th>
+                <th scope="col">Impact</th>
+                <th scope="col">Priority</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody id="auditTbody">
+              <!-- Populated dynamically by app.js -->
+            </tbody>
+          </table>
+          <div id="auditEmpty" class="audit-empty" aria-live="polite" hidden>
+            No events match your search criteria.
+          </div>
+        </div>
+
+      </div><!-- /card -->
+    </section>
+
+  </main><!-- /main -->
+
+  <!-- ============================================================
+       FOOTER
+  ============================================================ -->
+  <footer class="site-footer" role="contentinfo">
+    <span>EcoTrack ESG Command Center &mdash; IBM Sustainability AI &amp; Cloud Innovation Challenge</span>
+    <span class="footer-sep">|</span>
+    <span>GHG Protocol Aligned</span>
+    <span class="footer-sep">|</span>
+    <span>All data is illustrative</span>
+    <div class="footer-credit">Made with IBM Bob</div>
+  </footer>
+
+  <!-- ============================================================
+       TOAST NOTIFICATION
+  ============================================================ -->
+  <div id="toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast__dot" id="toastDot"></div>
+    <span id="toastMsg"></span>
+  </div>
+
+  <!-- ============================================================
+       APP SCRIPT — loaded at bottom of body
+  ============================================================ -->
+  <script src="app.js"></script>
+
+</body>
+</html>
